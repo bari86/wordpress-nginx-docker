@@ -3,7 +3,7 @@ services:
 
   wordpress:
     # default port 9000 (FastCGI)
-    image: wordpress:6-fpm
+    image: wordpress:6.2.2-php8.1-fpm
     container_name: wp-wordpress
     env_file:
       - .env
@@ -48,7 +48,7 @@ services:
 
   nginx:
     # default ports 80, 443 - expose mapping as needed to host
-    image: nginx:1
+    image: nginx:alpine
     container_name: wp-nginx
     env_file:
       - .env
