@@ -12,14 +12,20 @@ Notes on deploying a single site [WordPress FPM Edition](https://hub.docker.com/
 
 ## Table of contents
 
-- [Overview](#overview)
-    - [Host requirements](#reqts)
-- [Configuration](#config)
-- [Deploy](#deploy)
-- [Adminer](#adminer)
-- [Teardown](#teardown)
-- [References](#references)
-- [Notes](#notes)
+- [WordPress (FPM Edition) - Docker](#wordpress-fpm-edition---docker)
+  - [Table of contents](#table-of-contents)
+  - [Overview](#overview)
+    - [Host requirements](#host-requirements)
+  - [Configuration](#configuration)
+  - [Deploy](#deploy)
+  - [Adminer](#adminer)
+  - [Teardown](#teardown)
+  - [References](#references)
+  - [Notes](#notes)
+    - [Let's Encrypt SSL Certificate](#lets-encrypt-ssl-certificate)
+    - [Error establishing database connection](#error-establishing-database-connection)
+    - [Port Mapping](#port-mapping)
+  - [backup and restore](#backup-and-restore)
 
 ## <a name="overview"></a>Overview
 
@@ -379,3 +385,11 @@ For the `wordpress` stanza, add
     ports:
       - "9000:9000"
 ```
+
+## backup and restore
+
+backup: `tar -zcvf site.tar.gz site`
+
+view: `tar -tf site.tar.gz`
+
+restore: `tar -xvf site.tar.gz`
