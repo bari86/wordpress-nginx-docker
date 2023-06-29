@@ -22,6 +22,27 @@ services:
       - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
       - WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
 
+  # Redis
+  redis:
+    image: 'redis:alpine'
+    container_name: wp-redis
+    env_file:
+      - .env
+    restart: unless-stopped
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+    networks:
+      - wordpress
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test:
+        - CMD
+        - redis-cli
+        - ping
+      retries: 3
+      timeout: 5s    
+
   database:
     # default port 3306
     image: mysql:8
