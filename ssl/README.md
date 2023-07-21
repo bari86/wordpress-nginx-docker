@@ -1,6 +1,6 @@
 # SSL - certificates for development
 
-SSL development certificates are included in this repository for demonstration purposes and should be replaced with genuine certificates in production.
+SSL development certificates are included in this repository for demonstration purposes and should be replaced with genuine certificates in production. For example, look for the one ending with *.defaults.
 
 - `privkey.pem`  : the private key for your certificate.
 - `fullchain.pem`: the certificate file used in most server software (copy of chain.pem for development purposes).
