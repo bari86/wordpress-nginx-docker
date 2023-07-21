@@ -24,11 +24,13 @@ services:
 
   # Redis
   redis:
-    image: 'redis:alpine'
+    image: 'redis:7.0.12'
     container_name: wp-redis
     env_file:
       - .env
     restart: unless-stopped
+    volumes:
+      - ${REDIS_DATA}:/data
     ports:
       - '${REDIS_PORT:-6379}:6379'
     networks:

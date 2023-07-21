@@ -25,7 +25,8 @@ Notes on deploying a single site [WordPress FPM Edition](https://hub.docker.com/
     - [Let's Encrypt SSL Certificate](#lets-encrypt-ssl-certificate)
     - [Error establishing database connection](#error-establishing-database-connection)
     - [Port Mapping](#port-mapping)
-  - [backup and restore](#backup-and-restore)
+  - [Backup and Restore](#backup-and-restore)
+  - [Redis](#redis)
 
 ## <a name="overview"></a>Overview
 
@@ -386,10 +387,21 @@ For the `wordpress` stanza, add
       - "9000:9000"
 ```
 
-## backup and restore
+## Backup and Restore
 
 backup: `tar -zcvf site.tar.gz site`
 
 view: `tar -tf site.tar.gz`
 
 restore: `tar -xvf site.tar.gz`
+
+## Redis
+
+To use redis in Wordpress, you need to add this into wp-config file.
+
+```redis
+define( 'WP_REDIS_HOST', 'redis' );
+define( 'WP_REDIS_PORT', 6379 );
+```
+
+
