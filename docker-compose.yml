@@ -16,7 +16,8 @@ services:
     volumes:
       - ${WORDPRESS_LOCAL_HOME}:/var/www/html
       - ${WORDPRESS_UPLOADS_CONFIG}:/usr/local/etc/php/conf.d/uploads.ini
-      # - /path/to/repo/myTheme/:/var/www/html/wp-content/themes/myTheme
+      - ${WORDPRESS_LOCAL_PLUGINS}:/var/www/html/wp-content/plugins/
+      - ${WORDPRESS_LOCAL_THEMES}:/var/www/html/wp-content/themes/
     environment:
       - WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}
       - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
@@ -45,7 +46,7 @@ services:
         - redis-cli
         - ping
       retries: 3
-      timeout: 5s    
+      timeout: 5s
 
   database:
     # default port 3306

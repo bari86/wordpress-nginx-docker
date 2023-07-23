@@ -85,7 +85,7 @@ export NGINX_LOGS=./logs/nginx
 # TBD
 ```
 
-Modify `nginx/default.conf` and replace `$host` and `8443` with your **Domain Name** and exposed **HTTPS Port** throughout the file
+Modify `nginx/default.conf` and replace `DOMAINNAME` and `443` with your **Domain Name** and exposed **HTTPS Port** throughout the file
 
 ```conf
 # default.conf
@@ -93,7 +93,7 @@ Modify `nginx/default.conf` and replace `$host` and `8443` with your **Domain Na
 server {
     listen 80;
     listen [::]:80;
-    server_name $host;
+    server_name DOMAINNAME;
     location / {
         # update port as needed for host mapped https
         rewrite ^ https://$host:8443$request_uri? permanent;
@@ -103,7 +103,7 @@ server {
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
-    server_name $host;
+    server_name DOMAINNAME;
     index index.php index.html index.htm;
     root /var/www/html;
     server_tokens off;
@@ -183,19 +183,19 @@ Once configured the containers can be brought up using Docker Compose
 
     ```console
     source .env
-    docker-compose pull
+    docker compose pull
     ```
 
 2. Bring up the Database and allow it a moment to create the WordPress user and database tables
 
     ```console
-    docker-compose up -d database
+    docker compose up -d database
     ```
     
     You will know it's ready when you see something like this in the docker logs
     
     ```console
-    $ docker-compose logs database
+    $ docker compose logs wp-database
     wp-database  | 2022-01-28 13:40:18+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.0.28-1debian10 started.
     wp-database  | 2022-01-28 13:40:18+00:00 [Note] [Entrypoint]: Switching to dedicated user 'mysql'
     wp-database  | 2022-01-28 13:40:18+00:00 [Note] [Entrypoint]: Entrypoint script for MySQL Server 8.0.28-1debian10 started.
@@ -220,13 +220,13 @@ Once configured the containers can be brought up using Docker Compose
 3. Bring up the WordPress and Nginx containers
 
     ```console
-    docker-compose up -d wordpress nginx
+    docker compose up -d wordpress nginx redis
     ```
     
     After a few moments the containers should be observed as running
     
     ```console
-    $ docker-compose ps
+    $ docker compose ps
     NAME                COMMAND                  SERVICE             STATUS              PORTS
     wp-database         "docker-entrypoint.s…"   database            running             33060/tcp
     wp-nginx            "/docker-entrypoint.…"   nginx               running             0.0.0.0:8080->80/tcp, 0.0.0.0:8443->443/tcp
