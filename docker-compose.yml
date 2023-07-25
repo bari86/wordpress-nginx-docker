@@ -49,8 +49,8 @@ services:
       timeout: 5s
 
   database:
-    # default port 3306
-    image: mysql:8.0.33
+    image: bitnami/mysql:8.0.34 # Alternative Bitnami image
+    # image: mysql:8.0.33 # Official MySQL image
     # image: rapidfort/mysql:8.0.33 # Alternative RapidFort hardened image
     container_name: wp-database
     env_file:
@@ -60,7 +60,6 @@ services:
       - wordpress
     ports:
       - '3306:3306'
-      - '33060:33060'
     extra_hosts:
       - "host.docker.internal:host-gateway"
     environment:
@@ -68,10 +67,15 @@ services:
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_AUTHENTICATION_PLUGIN=CACHING_SHA2_PASSWORD
     volumes:
-      - ${MYSQL_LOCAL_HOME}:/var/lib/mysql
-    command:
-      - '--default-authentication-plugin=mysql_native_password'
+      - 'mysql_data:/bitnami/mysql/data'
+    #  - ${MYSQL_LOCAL_HOME}:/var/lib/mysql # Original image
+    healthcheck:
+      test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
+      interval: 15s
+      timeout: 5s
+      retries: 6
 
   nginx:
     # default ports 80, 443 - expose mapping as needed to host
@@ -111,3 +115,7 @@ networks:
   wordpress:
     name: wp-wordpress
     driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
