@@ -28,6 +28,7 @@ Notes on deploying a single site [WordPress FPM Edition](https://hub.docker.com/
     - [Port Mapping](#port-mapping)
   - [Backup and Restore](#backup-and-restore)
   - [Redis](#redis)
+  - [FileBrowser](#filebrowser)
 
 ## <a name="overview"></a>Overview
 
@@ -390,11 +391,11 @@ For the `wordpress` stanza, add
 
 ## Backup and Restore
 
-backup: `tar -zcvf site.tar.gz site`
+Backup: `tar -zcvf site.tar.gz site`
 
-view: `tar -tf site.tar.gz`
+View: `tar -tf site.tar.gz`
 
-restore: `tar -xvf site.tar.gz`
+Restore: `tar -xvf site.tar.gz`
 
 ## Redis
 
@@ -403,6 +404,49 @@ To use redis in Wordpress, you need to add this into wp-config file.
 ```redis
 define( 'WP_REDIS_HOST', 'redis' );
 define( 'WP_REDIS_PORT', 6379 );
+define( 'WP_REDIS_PASSWORD','password123!' );
 ```
 
+
+## FileBrowser
+
+To use FileBrowser, uncomment the FileBrowser section. Then use Nginx to reverse proxy to the port 8080, or any port that you like. Please refer Nginx code block example below or read more at https://hub.docker.com/r/hurlenko/filebrowser
+
+```filebrowser
+location /filebrowser {
+    # prevents 502 bad gateway error
+    proxy_buffers 8 32k;
+    proxy_buffer_size 64k;
+
+    client_max_body_size 75M;
+
+    # redirect all HTTP traffic to localhost:8080;
+    proxy_pass http://localhost:8080;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    #proxy_set_header X-NginX-Proxy true;
+
+    # enables WS support
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+
+    proxy_read_timeout 999999999;
+}
+```
+
+Please see the example of username and password of FileBrowser.
+
+```filebrowser
+  - FB_USERNAME=myusername # Username is 'myusername'. Please change the username upon login
+  - FB_PASSWORD=$$2y$$08$$OdmyB1FfV4NNnevqyfh9YugJmjKVE3MR.aPCjMtZPMMAHWp3laTxi # Password is 'MyPassword'. Please change the password upon login
+```
+Please run the script 
+
+```filebrowser
+htpasswd -bnBC 8 "" MyPassword | grep -oP '\$2[ayb]\$.{56}'
+```
+
+to get hashed password. Make sure to change to '$$' to every '$' character to avoid character escaping.
 
