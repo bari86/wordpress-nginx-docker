@@ -3,10 +3,10 @@
 Notes on deploying a single site [WordPress FPM Edition](https://hub.docker.com/_/wordpress/) instance as a docker deployment orchestrated by Docker Compose.
 
 - Use the FPM version of WordPress (v6.2.2-fpm)
-- Use MySQL as the database (v8.0.33)
+- Use MariaDB (10.9.7) or MySQL (v8.0.33) as the database 
 - Use Nginx as the web server (v1)
-- Use Redis as the database cache (v7.0.12)
-- Use Adminer as the database management tool (v4)
+- Use Redis (v7.0.12) as the database cache
+- Use phpMyAdmin (5.2.1) or Adminer (v4) as the database management tool
 - Include self-signed SSL certificate ([Let's Encrypt localhost](https://letsencrypt.org/docs/certificates-for-localhost/) format)
 
 **DISCLAIMER: The code herein may not be up to date nor compliant with the most recent package and/or security notices. The frequency at which this code is reviewed and updated is based solely on the lifecycle of the project for which it was written to support, and is not actively maintained outside of that scope. Use at your own risk.**
@@ -19,6 +19,7 @@ Notes on deploying a single site [WordPress FPM Edition](https://hub.docker.com/
     - [Host requirements](#host-requirements)
   - [Configuration](#configuration)
   - [Deploy](#deploy)
+  - [phpMyAdmin](#phpmyadmin)  
   - [Adminer](#adminer)
   - [Teardown](#teardown)
   - [References](#references)
@@ -176,6 +177,27 @@ Included `uploads.ini` file allows for **Maximum upload file size: 75 MB**
 
 ![](./imgs/WP-media-filesize.png)
 
+
+In 'docker-compose.yml' file, there are few options to choose from. You can select to use between:
+
+- Wordpress
+ - Wordpress PHP8.2 using FPM (default)
+ - Wordpress PHP8.1 using FPM
+
+- Wordpress CLI
+
+- Database
+ - MariaDB 10.9.7 with phpMyadmin 5.2.1 (default)
+ - MySQL 8.0.34 with phpMyadmin 5.2.1
+
+- Redis
+
+- Nginx
+
+- File Browser
+
+Note: [Work In Progress] At the moment, you would need to configure on your own the reverse proxy for the phpMyadmin and File Browser. Will update the Nginx configuration file on a later release.
+
 ## <a name="deploy"></a>Deploy
 
 Once configured the containers can be brought up using Docker Compose
@@ -244,6 +266,11 @@ Complete the initial WordPress installation process, and when completed you shou
 
 ![](./imgs/WP-dashboard.png)
 ![](./imgs/WP-view-site.png)
+
+## <a name="phpmyadmin"></a>phpMyAdmin
+
+More information coming soon.
+
 
 ## <a name="adminer"></a>Adminer
 
@@ -404,7 +431,7 @@ To use redis in Wordpress, you need to add this into wp-config file.
 ```redis
 define( 'WP_REDIS_HOST', 'redis' );
 define( 'WP_REDIS_PORT', 6379 );
-define( 'WP_REDIS_PASSWORD','password123!' );
+define( 'WP_REDIS_PASSWORD', 'password123!' );
 ```
 
 
