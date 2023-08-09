@@ -426,7 +426,7 @@ Restore: `tar -xvf site.tar.gz`
 
 ## Redis
 
-To use redis in Wordpress, you need to add this into wp-config file.
+To use redis in Wordpress, you need to add this into `wp-config` file. Please change the password in `.env` and `wp-config` file accordingly.
 
 ```redis
 define( 'WP_REDIS_HOST', 'redis' );

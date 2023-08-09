@@ -130,26 +130,27 @@ services:
       timeout: 5s
       retries: 6
 
-  # phpMyAdmin for MariaDB
-  phpmyadmin:
-    image: bitnami/phpmyadmin:5.2.1  # Bitnami phpMyAdmin image
-    container_name: wp-phpmyadmin
-    env_file:
-      - .env
-    restart: unless-stopped
-    links:
-      - database
-    networks:
-      - wordpress
-    ports:
-      - "8180:8080"
-    volumes:
-      - phpmyadmin_data:/bitnami/mariadb
-    environment:
-      - DATABASE_ALLOW_NO_PASSWORD=${PHPMYADMIN_NO_PASSWORD}
-      - PHPMYADMIN_ALLOW_ARBITRARY_SERVER=${PHPMYADMIN_ARBITRARY_MARIADB}
-      - DATABASE_HOST=${MYSQL_DATABASE}
-      - DATABASE_PORT_NUMBER=${PHPMYADMIN_PORT}
+# Not fully working yet. Can show login page but cannot login. Not sure why.
+  # phpMyAdmin for MariaDB 
+#  phpmyadmin:
+#    image: bitnami/phpmyadmin:5.2.1  # Bitnami phpMyAdmin image
+#    container_name: wp-phpmyadmin
+#    env_file:
+#      - .env
+#    restart: unless-stopped
+#    links:
+#      - database
+#    networks:
+#      - wordpress
+#    ports:
+#      - "8180:8080"
+#    volumes:
+#      - phpmyadmin_data:/bitnami/mariadb
+#    environment:
+#      - DATABASE_ALLOW_NO_PASSWORD=${PHPMYADMIN_NO_PASSWORD}
+#      - PHPMYADMIN_ALLOW_ARBITRARY_SERVER=${PHPMYADMIN_ARBITRARY_MARIADB}
+#      - DATABASE_HOST=${MYSQL_DATABASE}
+#      - DATABASE_PORT_NUMBER=${PHPMYADMIN_PORT}
 
 #  # Database using MySQL
 #  database:
@@ -182,23 +183,24 @@ services:
 #      timeout: 5s
 #      retries: 6
 
-#  # phpMyAdmin for MySQL
-#  phpmyadmin:
-#    image: phpmyadmin:5.2.1-apache  # Official phpMyAdmin image
-#    container_name: wp-phpmyadmin
-#    env_file:
-#      - .env
-#    restart: unless-stopped
-#    links:
-#      - database
-#    networks:
-#      - wordpress
-#    ports:
-#      - "8180:80"
-#    environment:
-#      - PMA_ARBITRARY=$PHPMYADMIN_ARBITRARY
-#      - PMA_HOST=$PHPMYADMIN_HOST
-#      - PMA_PORT=$PHPMYADMIN_PORT
+# Working
+  # phpMyAdmin for MySQL
+  phpmyadmin:
+    image: phpmyadmin:5.2.1-apache  # Official phpMyAdmin image
+    container_name: wp-phpmyadmin
+    env_file:
+      - .env
+    restart: unless-stopped
+    links:
+      - database
+    networks:
+      - wordpress
+    ports:
+      - "8180:80"
+    environment:
+      - PMA_ARBITRARY=$PHPMYADMIN_ARBITRARY
+      - PMA_HOST=$PHPMYADMIN_HOST
+      - PMA_PORT=$PHPMYADMIN_PORT
 
   filebrowser:
     image: hurlenko/filebrowser
