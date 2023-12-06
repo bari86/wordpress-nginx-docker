@@ -1,7 +1,10 @@
 # Use the official WordPress image as the base
 
 # Wordpress PHP8.2 using FPM
-FROM wordpress:6.2.2-php8.2-fpm
+FROM wordpress:6.4.1-php8.2-fpm
+
+# Wordpress PHP8.2 using FPM
+# FROM wordpress:6.2.2-php8.2-fpm
 
 # Wordpress PHP8.1 using FPM
 # FROM wordpress:6.2.2-php8.1-fpm

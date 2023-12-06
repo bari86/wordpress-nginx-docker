@@ -1,6 +1,9 @@
 version: '3.9'
 services:
 
+# Last update: 26/11/2023
+# Author: MariHost
+
 # Wordpress     # default port 9000 (FastCGI)
   wordpress:
     build:
@@ -58,8 +61,9 @@ services:
 
 # Redis
   redis:
-    image: rapidfort/redis:7.0.11 # RapidFort hardened image
-    # image: redis:7.0.12 # Official Redis image
+    image: rapidfort/redis:7.0.13 # RapidFort hardened image
+    # image: redis:7.2.3 # Official Redis image
+    # image: redis:7.0.14 # Official Redis image
     container_name: wp-redis
     env_file:
       - .env
@@ -108,7 +112,7 @@ services:
   # There are two SQL to choose from. MySQL is currently commented out.
   # Database using MariaDB
   database:
-    image: bitnami/mariadb:10.9.7 # Bitnami MariaDB image
+    image: bitnami/mariadb:10.11.6 # Bitnami MariaDB image
     container_name: wp-database
     env_file:
       - .env
@@ -154,9 +158,9 @@ services:
 
 #  # Database using MySQL
 #  database:
-#    # image: bitnami/mysql:8.0.34 # Alternative Bitnami image
-#    # image: mysql:8.0.33 # Official MySQL image
-#    image: rapidfort/mysql:8.0.33 # Alternative RapidFort hardened image
+#    # image: bitnami/mysql:8.0.35 # Alternative Bitnami image
+#    # image: mysql:8.0.35 # Official MySQL image
+#    image: rapidfort/mysql:8.0.34 # Alternative RapidFort hardened image
 #    container_name: wp-database
 #    env_file:
 #      - .env
@@ -186,6 +190,7 @@ services:
 # Working
   # phpMyAdmin for MySQL
   phpmyadmin:
+    # image: bitnami/phpmyadmin:5.2.1  # Alternative Bitnami image
     image: phpmyadmin:5.2.1-apache  # Official phpMyAdmin image
     container_name: wp-phpmyadmin
     env_file:
