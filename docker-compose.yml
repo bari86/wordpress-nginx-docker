@@ -1,7 +1,7 @@
 version: '3.9'
 services:
 
-# Last update: 26/11/2023
+# Last update: 23/12/2023
 # Author: MariHost
 
 # Wordpress     # default port 9000 (FastCGI)
@@ -109,30 +109,30 @@ services:
       - ${NGINX_SSL_CERTS}:/etc/ssl:ro
       - ${NGINX_LOGS}:/var/log/nginx
 
-  # There are two SQL to choose from. MySQL is currently commented out.
+  # There are two SQL to choose from. MySQL tends to be faster. Therefore MariaDB is currently commented out.
   # Database using MariaDB
-  database:
-    image: bitnami/mariadb:10.11.6 # Bitnami MariaDB image
-    container_name: wp-database
-    env_file:
-      - .env
-    restart: unless-stopped
-    networks:
-      - wordpress
-    ports:
-      - '3306:3306'
-    environment:
-      - MARIADB_DATABASE=${MYSQL_DATABASE}
-      - MARIADB_USER=${MYSQL_USER}
-      - MARIADB_PASSWORD=${MYSQL_PASSWORD}
-      - MARIADB_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-    volumes:
-      - mariadb_data:/bitnami/mariadb
-    healthcheck:
-      test: ['CMD', '/opt/bitnami/scripts/mariadb/healthcheck.sh']
-      interval: 15s
-      timeout: 5s
-      retries: 6
+#  database:
+#    image: bitnami/mariadb:10.11.6 # Bitnami MariaDB image
+#    container_name: wp-database
+#    env_file:
+#      - .env
+#    restart: unless-stopped
+#    networks:
+#      - wordpress
+#    ports:
+#      - '3306:3306'
+#    environment:
+#      - MARIADB_DATABASE=${MYSQL_DATABASE}
+#      - MARIADB_USER=${MYSQL_USER}
+#      - MARIADB_PASSWORD=${MYSQL_PASSWORD}
+#      - MARIADB_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+#    volumes:
+#      - mariadb_data:/bitnami/mariadb
+#    healthcheck:
+#      test: ['CMD', '/opt/bitnami/scripts/mariadb/healthcheck.sh']
+#      interval: 15s
+#      timeout: 5s
+#      retries: 6
 
 # Not fully working yet. Can show login page but cannot login. Not sure why.
   # phpMyAdmin for MariaDB 
@@ -156,36 +156,36 @@ services:
 #      - DATABASE_HOST=${MYSQL_DATABASE}
 #      - DATABASE_PORT_NUMBER=${PHPMYADMIN_PORT}
 
-#  # Database using MySQL
-#  database:
-#    # image: bitnami/mysql:8.0.35 # Alternative Bitnami image
-#    # image: mysql:8.0.35 # Official MySQL image
-#    image: rapidfort/mysql:8.0.34 # Alternative RapidFort hardened image
-#    container_name: wp-database
-#    env_file:
-#      - .env
-#    restart: unless-stopped
-#    networks:
-#      - wordpress
-#    ports:
-#      - '3306:3306'
-#    extra_hosts:
-#      - "host.docker.internal:host-gateway"
-#    environment:
-#      - MYSQL_DATABASE=${MYSQL_DATABASE}
-#      - MYSQL_USER=${MYSQL_USER}
-#      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-#      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-#      - MYSQL_AUTHENTICATION_PLUGIN=CACHING_SHA2_PASSWORD
-#      - MYSQL_DEFAULT_AUTHENTICATION_PLUGIN=CACHING_SHA2_PASSWORD
-#    volumes:
-#      - 'mysql_data:/bitnami/mysql/data'
-#    #  - ${MYSQL_LOCAL_HOME}:/var/lib/mysql # Official MySQL image
-#    healthcheck:
-#      test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
-#      interval: 15s
-#      timeout: 5s
-#      retries: 6
+  # Database using MySQL
+  database:
+    # image: bitnami/mysql:8.0.35 # Alternative Bitnami image
+    # image: mysql:8.0.35 # Official MySQL image
+    image: rapidfort/mysql:8.0.34 # Alternative RapidFort hardened image
+    container_name: wp-database
+    env_file:
+      - .env
+    restart: unless-stopped
+    networks:
+      - wordpress
+    ports:
+      - '3306:3306'
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_AUTHENTICATION_PLUGIN=CACHING_SHA2_PASSWORD
+      - MYSQL_DEFAULT_AUTHENTICATION_PLUGIN=CACHING_SHA2_PASSWORD
+    volumes:
+      - 'mysql_data:/bitnami/mysql/data'
+    #  - ${MYSQL_LOCAL_HOME}:/var/lib/mysql # Official MySQL image
+    healthcheck:
+      test: ['CMD', '/opt/bitnami/scripts/mysql/healthcheck.sh']
+      interval: 15s
+      timeout: 5s
+      retries: 6
 
 # Working
   # phpMyAdmin for MySQL
@@ -227,7 +227,7 @@ services:
     # To run filebrowser behind Nginx, please refer https://hub.docker.com/r/hurlenko/filebrowser
     # You can use the script htpasswd -bnBC 8 "" FileChangeMe23Browser | grep -oP '\$2[ayb]\$.{56}' to get hashed password.
 
-  # adminer - bring up only as needed - bypasses nginx
+  # adminer - bring up only as needed - bypasses nginx (not in used. to be deleted)
   # adminer:
   #  # default port 8080
   #   image: adminer:4
@@ -246,13 +246,13 @@ networks:
     driver: bridge
 
 # For MariaDB only
-volumes:
-  mariadb_data:
-    driver: local
-  phpmyadmin_data:
-    driver: local
+#volumes:
+#  mariadb_data:
+#    driver: local
+#  phpmyadmin_data:
+#    driver: local
 
 # For MySQL only
-#volumes:
-#  mysql_data:
-#    driver: local
+volumes:
+  mysql_data:
+    driver: local
