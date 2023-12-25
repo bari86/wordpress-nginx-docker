@@ -9,7 +9,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    # image: wordpress-custom # Bug? To check
+    image: wordpress-custom
     container_name: wp-wordpress
     env_file:
       - .env
