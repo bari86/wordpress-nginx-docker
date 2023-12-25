@@ -40,8 +40,8 @@ services:
           define( 'WP_REDIS_PREFIX', '${WORDPRESS_REDIS_PREFIX}' );
           define( 'WP_CACHE_KEY_SALT', '${WORDPRESS_REDIS_CACHE_KEY_SALT}' );
           /* Domain URL */
-          define( 'WP_HOME', '${WORDPRESS_DOMAIN}' );
-          define( 'WP_SITEURL', '${WORDPRESS_DOMAIN}' );
+          define( 'WP_HOME', 'https://${WORDPRESS_DOMAIN}' );
+          define( 'WP_SITEURL', 'https://${WORDPRESS_DOMAIN}' );
           /* Enable Debug logging to the /wp-content/debug.log file */
           define( 'WP_DEBUG_LOG', true );
           /* Disable front end display of errors and warnings */
