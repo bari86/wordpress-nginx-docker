@@ -29,13 +29,13 @@ services:
       - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
       - WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
       - WORDPRESS_TABLE_PREFIX=wpmh_
-      - WORDPRESS_ADMIN_USER=adminname
-      - WORDPRESS_ADMIN_PASSWORD=adminpassword
-      - WORDPRESS_ADMIN_EMAIL=adminemail@example.com
+#      - WORDPRESS_ADMIN_USER=adminname # Might be incorrect
+#      - WORDPRESS_ADMIN_PASSWORD=adminpassword # Might be incorrect
+#      - WORDPRESS_ADMIN_EMAIL=adminemail@example.com # Might be incorrect
       - WORDPRESS_CONFIG_EXTRA=
           /* Redis */
           define( 'WP_REDIS_HOST', 'redis' );
-          define( 'WP_REDIS_PORT', ${REDIS_PORT} );
+          define( 'WP_REDIS_PORT', '${REDIS_PORT}' );
           define( 'WP_REDIS_PASSWORD', '${REDIS_PASSWORD}' );
           define( 'WP_REDIS_PREFIX', '${WORDPRESS_REDIS_PREFIX}' );
           define( 'WP_CACHE_KEY_SALT', '${WORDPRESS_REDIS_CACHE_KEY_SALT}' );
@@ -59,8 +59,8 @@ services:
     depends_on:
       - wordpress
       - database
-    image: wordpress:cli-php8.2 # Wordpress-CLI PHP8.2
-    # image: wordpress:cli-php8.1 # Wordpress-CLI PHP8.1
+    image: wordpress:cli-2.9.0-php8.2 # Wordpress-CLI Version 2.9.0 PHP8.2
+    # image: wordpress:cli-php8.2 # Wordpress-CLI PHP8.2
     user: $WORDPRESSCLI_UID:$WORDPRESSCLI_GUID
     command: tail -f /dev/null
     volumes:
