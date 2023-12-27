@@ -21,8 +21,8 @@ services:
     volumes:
       - ${WORDPRESS_LOCAL_HOME}:/var/www/html
       - ${WORDPRESS_UPLOADS_CONFIG}:/usr/local/etc/php/conf.d/uploads.ini
-#      - ${WORDPRESS_LOCAL_PLUGINS}:/var/www/html/wp-content/plugins/ # Not working. To check permission issue
-#      - ${WORDPRESS_LOCAL_THEMES}:/var/www/html/wp-content/themes/ # Not working. To check permission issue
+#      - ${WORDPRESS_LOCAL_PLUGINS}:/var/www/html/wp-content/plugins/ # Not working. To check permission issue. Might need to run as www-data
+#      - ${WORDPRESS_LOCAL_THEMES}:/var/www/html/wp-content/themes/ # Not working. To check permission issue. Might need to run as www-data
     environment:
       - WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}
       - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
@@ -63,6 +63,12 @@ services:
     # image: wordpress:cli-php8.2 # Wordpress-CLI PHP8.2
     user: $WORDPRESSCLI_UID:$WORDPRESSCLI_GUID
     command: tail -f /dev/null
+    #command: >
+    #  sh -c "
+    #    wp core install --url=http://localhost:80 --title=Example --admin_user=admin --admin_password=password --admin_email=admin@example.com
+    #    wp plugin install hello-dolly --activate
+    #    wp theme install twentynineteen --activate
+    #  "
     volumes:
       - ${WORDPRESS_LOCAL_HOME}:/var/www/html
     environment:
