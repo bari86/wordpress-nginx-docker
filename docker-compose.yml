@@ -1,7 +1,7 @@
 version: '3.9'
 services:
 
-# Last update: 04/02/2024
+# Last update: 14/08/2024
 # Author: MariHost
 
 # Wordpress     # default port 9000 (FastCGI)
@@ -63,8 +63,7 @@ services:
     depends_on:
       - wordpress
       - database
-    image: wordpress:cli-2.9.0-php8.2 # Wordpress-CLI Version 2.9.0 PHP8.2
-    # image: wordpress:cli-php8.2 # Wordpress-CLI PHP8.2
+    image: wordpress:cli-2.11.0-php8.3 # Wordpress-CLI Version 2.11.0 PHP8.3
     user: $WORDPRESSCLI_UID:$WORDPRESSCLI_GUID
     command: tail -f /dev/null
     # TODO To test command below. Might not be working yet
@@ -84,9 +83,7 @@ services:
 
 # Redis
   redis:
-    image: rapidfort/redis:7.0.13 # RapidFort hardened image
-    # image: redis:7.2.3 # Official Redis image
-    # image: redis:7.0.14 # Official Redis image
+    image: rapidfort/redis:7.4.0 # RapidFort hardened image
     container_name: wp-redis
     env_file:
       - .env
@@ -113,7 +110,7 @@ services:
 
 # Nginx (Working)
   nginx:
-    image: nginx:alpine
+    image: nginx:alpine # TODO: Need a specific version here to do version control
     container_name: wp-nginx
     env_file:
       - .env
@@ -163,6 +160,32 @@ services:
 #      interval: 30s
 #      timeout: 3s
 #      retries: 3
+
+# Nginx Bitnami (Not working yet. To retest. New block) 
+#nginx:
+#  image: bitnami/nginx:1.25.3
+#  container_name: wp-nginx
+#  env_file:
+#    - .env
+#  restart: unless-stopped
+#  networks:
+#    - wordpress
+#  depends_on:
+#    - wordpress
+#  ports:
+#    - "80:80"
+#    - "443:443"
+#  volumes:
+#    - ${WORDPRESS_LOCAL_HOME}:/var/www/html
+#    - ${NGINX_CONF}:/opt/bitnami/nginx/conf/server_blocks/default.conf:ro
+#    - ${NGINX_SSL_CERTS}:/etc/ssl:ro
+#    - ${NGINX_LOGS}:/opt/bitnami/nginx/logs
+#    - ${NGINX_CACHE}:/opt/bitnami/nginx/cache
+#  healthcheck:
+#    test: ["CMD", "curl", "-f", "https://localhost/", "--insecure"]
+#    interval: 30s
+#    timeout: 3s
+#    retries: 3
 
 # Nginx Bitnami (Not working yet) 
 #  nginx:
@@ -243,9 +266,7 @@ services:
 
   # Database using MySQL
   database:
-    # image: bitnami/mysql:8.0.35 # Alternative Bitnami image
-    # image: mysql:8.0.35 # Official MySQL image
-    image: rapidfort/mysql:8.0.34 # Alternative RapidFort hardened image
+    image: rapidfort/mysql:8.0.37 # RapidFort hardened MySQL image
     container_name: wp-database
     env_file:
       - .env
@@ -311,19 +332,6 @@ services:
       - no-new-privileges:true
     # To run filebrowser behind Nginx, please refer https://hub.docker.com/r/hurlenko/filebrowser
     # You can use the script htpasswd -bnBC 8 "" FileChangeMe23Browser | grep -oP '\$2[ayb]\$.{56}' to get hashed password.
-
-  # adminer - bring up only as needed - bypasses nginx (not in used. to be deleted)
-  # adminer:
-  #  # default port 8080
-  #   image: adminer:4
-  #   container_name: wp-adminer
-  #   restart: unless-stopped
-  #   networks:
-  #     - wordpress
-  #   depends_on:
-  #     - database
-  #   ports:
-  #     - "9000:8080"
 
 networks:
   wordpress:
